@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea.tsx";
 import { Label } from "@/components/ui/label.tsx";
 import Footer from "@/components/Footer.tsx";
 import { Trash2 } from "lucide-react";
+import Header from "@/components/Header.tsx";
 
 function App() {
   const [names, setNames] = useQueryState("names", { defaultValue: "" });
@@ -19,6 +20,7 @@ function App() {
   });
 
   useEffect(() => {
+    if (names?.length === 0) return;
     const nameList = names
       .trim()
       .split(",")
@@ -59,20 +61,14 @@ function App() {
   return (
     <>
       <div className={"flex flex-col flex-wrap items-center mb-40 mt-10"}>
-        <div className={"mb-10 flex flex-col items-center"}>
-          <h1>Standup Name Selector</h1>
-          <h2 className={"text-xl"}>
-            A lightweight, fast random name selector
-          </h2>
-        </div>
-
+        <Header />
         <div
           className={"flex flex-wrap flex-col items-center gap-1 mb-10 w-full"}
         >
-          <Label className={"text-lg"}>
-            Enter comma separated list of names:
-          </Label>
           <div className="relative w-full max-w-md mx-auto mt-4">
+            <Label className={"text-2xl text-left"}>
+              Enter comma separated list of names:
+            </Label>
             <Textarea
               autoComplete="off"
               autoCorrect="off"
@@ -82,7 +78,7 @@ function App() {
               onChange={(e) => setNames(e.target.value)}
               placeholder="Megatron, Optimus, Bumblebee, Starscream, Soundwave"
               className={
-                "h-[8em] ring-2 ring-black focus-visible:ring-2 text-lg tracking-wide font-light"
+                "h-[8em] ring-2 ring-gray-600 focus-visible:ring-2 text-lg tracking-wide font-light mt-5"
               }
             />
             <Button
@@ -96,37 +92,41 @@ function App() {
         </div>
 
         <div className={"p-5 flex flex-wrap gap-10 flex-row text-center"}>
-          <div>
-            <ul className={"mb-10"}>
-              {remainingList.map((name) => (
-                <li key={name}>
-                  <Button
-                    variant={"default"}
-                    disabled
-                    className={
-                      "w-full mb-2 bg-gray-800 text-white disabled:opacity-100"
-                    }
-                  >
-                    {name}
-                  </Button>
-                </li>
-              ))}
-            </ul>
-            <ul>
-              {nameList
-                .filter((x) => !remainingList.includes(x))
-                .map((name) => (
-                  <li key={name} className={"mb-2"}>
+          {nameList.length > 0 && (
+            <div>
+              <ul className={"mb-10"}>
+                {remainingList.map((name) => (
+                  <li key={name}>
                     <Button
+                      variant={"default"}
                       disabled
-                      className={"w-full line-through text-white bg-gray-800"}
+                      className={
+                        "min-w-[20em] mb-2 bg-cyan-600 text-white disabled:opacity-100"
+                      }
                     >
                       {name}
                     </Button>
                   </li>
                 ))}
-            </ul>
-          </div>
+              </ul>
+              <ul>
+                {nameList
+                  .filter((x) => !remainingList.includes(x))
+                  .map((name) => (
+                    <li key={name} className={"mb-2"}>
+                      <Button
+                        disabled
+                        className={
+                          "min-w-[20em] line-through text-gray-800 bg-gray-200"
+                        }
+                      >
+                        {name}
+                      </Button>
+                    </li>
+                  ))}
+              </ul>
+            </div>
+          )}
           <Button
             onClick={selectRandomName}
             disabled={remainingList.length === 0 || disableButton}
@@ -145,9 +145,8 @@ function App() {
           </Button>
         </div>
       </div>
-      <div className="fixed inset-x-0 bottom-0 bg-black">
-        <Footer />
-      </div>
+
+      <Footer />
     </>
   );
 }
