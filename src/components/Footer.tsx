@@ -3,8 +3,8 @@ import { Github } from "lucide-react";
 
 export default function Footer() {
   return (
-    <div className="fixed inset-x-0 bottom-0 bg-black max-w-[50em] mx-auto">
-      <footer className={cn("text-white py-6 w-full")}>
+    <div className="fixed inset-x-0 bottom-0 bg-black w-full">
+      <footer className={cn("text-white max-w-[60em] mx-auto py-6")}>
         <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
           <div className="mb-4 md:mb-0">
             <h1 className="text-xl font-bold">Standup.Name</h1>

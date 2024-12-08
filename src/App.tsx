@@ -25,7 +25,7 @@ function App() {
       .trim()
       .split(",")
       .map((name) => name.trim());
-    setNames(nameList.join(", "));
+    setNames(nameList.join(","));
     setNameList(nameList);
     setRemainingList(nameList);
   }, [names]);
@@ -99,9 +99,13 @@ function App() {
                   <li key={name}>
                     <Button
                       variant={"default"}
-                      disabled
+                      onClick={() => {
+                        setRemainingList(
+                          remainingList.filter((x) => x !== name),
+                        );
+                      }}
                       className={
-                        "min-w-[20em] mb-2 bg-cyan-600 text-white disabled:opacity-100"
+                        "w-[20em] mb-2 bg-cyan-600 text-white disabled:opacity-100"
                       }
                     >
                       {name}
@@ -115,9 +119,11 @@ function App() {
                   .map((name) => (
                     <li key={name} className={"mb-2"}>
                       <Button
-                        disabled
+                        onClick={() => {
+                          setRemainingList([...remainingList, name]);
+                        }}
                         className={
-                          "min-w-[20em] line-through text-gray-800 bg-gray-200"
+                          "w-[20em] line-through text-gray-800 bg-gray-200"
                         }
                       >
                         {name}
@@ -127,22 +133,36 @@ function App() {
               </ul>
             </div>
           )}
-          <Button
-            onClick={selectRandomName}
-            disabled={remainingList.length === 0 || disableButton}
-            className={
-              "rounded-full w-[10em] h-[10em] text-wrap font-bold bg-purple-500 ring-4 ring-purple-600 " +
-              "hover:bg-purple-800 hover:ring-0 text-white"
-            }
-          >
-            {selectedName ? (
-              <h2 className={"font-bold text-lg"}>{state.output}</h2>
-            ) : (
-              <>
-                <p className={""}>Press Me</p>
-              </>
+          <div className={"flex flex-col gap-10"}>
+            <Button
+              onClick={selectRandomName}
+              disabled={remainingList.length === 0 || disableButton}
+              className={
+                "rounded-full w-[10em] h-[10em] text-wrap font-bold bg-purple-500 ring-4 ring-purple-600 " +
+                "hover:bg-purple-800 hover:ring-0 text-white"
+              }
+            >
+              {selectedName ? (
+                <h2 className={"font-bold text-lg"}>{state.output}</h2>
+              ) : (
+                <>
+                  <p className={""}>Press Me</p>
+                </>
+              )}
+            </Button>
+            {remainingList.length === 0 && nameList.length > 0 && (
+              <Button
+                onClick={() => {
+                  setRemainingList(nameList);
+                  setSelectedName("");
+                }}
+                variant={"default"}
+                className={"bg-red-700"}
+              >
+                <h2 className={"font-bold text-lg"}>Start Over</h2>
+              </Button>
             )}
-          </Button>
+          </div>
         </div>
       </div>
 
