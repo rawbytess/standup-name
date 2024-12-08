@@ -6,13 +6,28 @@ export default function Footer() {
     <div className="fixed inset-x-0 bottom-0 bg-black w-full">
       <footer className={cn("text-white max-w-[60em] mx-auto py-6")}>
         <div className="container mx-auto flex flex-col md:flex-row justify-between items-center">
-          <div className="mb-4 md:mb-0">
-            <h1 className="text-xl font-bold">Standup.Name</h1>
+          <div className="mb-4 md:mb-0 flex flex-col items-center">
+            <a
+              href={"https://www.linkedin.com/in/prenx4x/"}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={"mr-2 text-gray-100 hover:text-blue-300"}
+            >
+              Mufaddal Makati
+            </a>
+            <span className={"text-xs"}>
+              © {new Date().getFullYear()}. All rights reserved.
+            </span>
           </div>
           <div className="text-center text-md text-gray-100">
-            <span className={"mr-2"}>Mufaddal Makati</span>
-            <br />
-            <span>© {new Date().getFullYear()}. All rights reserved.</span>
+            <p className="text-md font-bold">Also checkout</p>
+            <a
+              href={"https://hissab.io"}
+              target={"_blank"}
+              className={"mr-2 text-gray-100 hover:text-blue-300"}
+            >
+              Hissab - A powerful natural language calculator
+            </a>
           </div>
           <div className="flex space-x-4">
             <a

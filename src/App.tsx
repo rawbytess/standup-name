@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTextScramble } from "@skits/react-text-scramble";
 import "./App.css";
 import { Button } from "@/components/ui/button.tsx";
@@ -6,7 +6,7 @@ import { useQueryState } from "nuqs";
 import { Textarea } from "@/components/ui/textarea.tsx";
 import { Label } from "@/components/ui/label.tsx";
 import Footer from "@/components/Footer.tsx";
-import { Trash2 } from "lucide-react";
+import { RotateCcw, Trash2 } from "lucide-react";
 import Header from "@/components/Header.tsx";
 
 function App() {
@@ -19,8 +19,18 @@ function App() {
     speed: 100,
   });
 
+  const resetList = useCallback(() => {
+    setNames("");
+    setSelectedName("");
+    setNameList([]);
+  }, []);
+
   useEffect(() => {
-    if (names?.length === 0) return;
+    if (names?.length === 0) {
+      resetList();
+      return;
+    }
+
     const nameList = names
       .trim()
       .split(",")
@@ -28,7 +38,7 @@ function App() {
     setNames(nameList.join(","));
     setNameList(nameList);
     setRemainingList(nameList);
-  }, [names]);
+  }, [names, resetList, setNames]);
 
   useEffect(() => {
     reveal(200, 100, "typewriter");
@@ -50,12 +60,6 @@ function App() {
       // setAttendedNames(names.filter((_, index) => index !== randomIndex));
       setDisableButton(false);
     }, 2000);
-  };
-
-  const resetList = () => {
-    setNames("");
-    setSelectedName("");
-    setNameList([]);
   };
 
   return (
@@ -95,17 +99,21 @@ function App() {
           {nameList.length > 0 && (
             <div>
               <ul className={"mb-10"}>
-                {remainingList.map((name) => (
+                {nameList.map((name) => (
                   <li key={name}>
                     <Button
                       variant={"default"}
                       onClick={() => {
-                        setRemainingList(
-                          remainingList.filter((x) => x !== name),
-                        );
+                        if (remainingList.includes(name))
+                          setRemainingList(
+                            remainingList.filter((x) => x !== name),
+                          );
+                        else setRemainingList([...remainingList, name]);
                       }}
                       className={
-                        "w-[20em] mb-2 bg-cyan-600 text-white disabled:opacity-100"
+                        remainingList.includes(name)
+                          ? "w-[20em] mb-2 bg-cyan-500 text-white disabled:opacity-100"
+                          : "w-[20em] mb-2 line-through text-gray-400 bg-cyan-900"
                       }
                     >
                       {name}
@@ -113,30 +121,16 @@ function App() {
                   </li>
                 ))}
               </ul>
-              <ul>
-                {nameList
-                  .filter((x) => !remainingList.includes(x))
-                  .map((name) => (
-                    <li key={name} className={"mb-2"}>
-                      <Button
-                        onClick={() => {
-                          setRemainingList([...remainingList, name]);
-                        }}
-                        className={
-                          "w-[20em] line-through text-gray-800 bg-gray-200"
-                        }
-                      >
-                        {name}
-                      </Button>
-                    </li>
-                  ))}
-              </ul>
             </div>
           )}
           <div className={"flex flex-col gap-10"}>
             <Button
               onClick={selectRandomName}
-              disabled={remainingList.length === 0 || disableButton}
+              disabled={
+                nameList.length === 0 ||
+                remainingList.length === 0 ||
+                disableButton
+              }
               className={
                 "rounded-full w-[10em] h-[10em] text-wrap font-bold bg-purple-500 ring-4 ring-purple-600 " +
                 "hover:bg-purple-800 hover:ring-0 text-white"
@@ -157,8 +151,9 @@ function App() {
                   setSelectedName("");
                 }}
                 variant={"default"}
-                className={"bg-red-700"}
+                className={"bg-blue-700"}
               >
+                <RotateCcw />
                 <h2 className={"font-bold text-lg"}>Start Over</h2>
               </Button>
             )}
