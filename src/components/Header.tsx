@@ -3,7 +3,7 @@ export default function Header() {
     <header className={"mb-10 flex flex-col items-center"}>
       <div className={"flex items-center gap-5"}>
         <img src={"/favicon.ico"} />
-        <h1>Random Name Selector</h1>
+        <h1>Random Name Picker</h1>
       </div>
       <h2 className={"text-xl mt-4"}>
         A lightweight, fast random name selector

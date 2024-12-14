@@ -20,7 +20,7 @@ export default function Footer() {
             </span>
           </div>
           <div className="text-center text-md text-gray-100">
-            <p className="text-md font-bold">Also checkout</p>
+            <p className="text-md font-bold">Also checkout:</p>
             <a
               href={"https://hissab.io"}
               target={"_blank"}
